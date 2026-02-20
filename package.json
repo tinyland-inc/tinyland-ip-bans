@@ -1,5 +1,5 @@
 {
-  "name": "@tinyland-inc/tinyland-ip-bans",
+  "name": "@tummycrypt/tinyland-ip-bans",
   "version": "0.1.0",
   "description": "Flat-file IP ban management with CRUD operations and expiry support",
   "type": "module",
@@ -12,7 +12,10 @@
       "import": "./dist/index.js"
     }
   },
-  "files": ["dist", "LICENSE"],
+  "files": [
+    "dist",
+    "LICENSE"
+  ],
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
@@ -35,5 +38,11 @@
     "typescript": "^5.0.0",
     "vitest": "^4.0.0"
   },
-  "engines": { "node": ">=22.0.0" }
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  }
 }
