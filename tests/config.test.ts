@@ -21,7 +21,7 @@ describe('ip-bans config', () => {
 			expect(logger.warn).toBeTypeOf('function');
 			expect(logger.error).toBeTypeOf('function');
 			expect(logger.debug).toBeTypeOf('function');
-			// Should not throw
+			
 			logger.info('test');
 			logger.error('test');
 		});

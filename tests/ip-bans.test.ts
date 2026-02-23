@@ -102,8 +102,8 @@ describe('ip-bans', () => {
 		});
 
 		it('returns true for IP within range (string comparison)', async () => {
-			// Note: uses simplified string comparison, so range values must be
-			// lexicographically ordered (same-length octets)
+			
+			
 			mockReadFile.mockResolvedValue(
 				JSON.stringify([
 					{
@@ -137,7 +137,7 @@ describe('ip-bans', () => {
 
 		it('returns false on read error (fail-safe)', async () => {
 			mockReadFile.mockRejectedValue(new Error('disk error'));
-			// ensureFile also reads, need to handle
+			
 			mockAccess.mockRejectedValue(new Error('no access'));
 			expect(await isIpBanned('1.2.3.4')).toBe(false);
 		});
@@ -220,7 +220,7 @@ describe('ip-bans', () => {
 
 		it('does nothing for non-existent IP', async () => {
 			await deactivateIpBan('nonexistent');
-			// Only ensureFile write, not writeBans
+			
 			const writeCalls = mockWriteFile.mock.calls.filter(
 				(c: unknown[]) => !(c[1] as string).startsWith('[]'),
 			);
@@ -326,7 +326,7 @@ describe('ip-bans', () => {
 	describe('ensureFile', () => {
 		it('creates directory and file if access fails', async () => {
 			mockAccess.mockRejectedValue(new Error('ENOENT'));
-			await getActiveBans(); // triggers ensureFile
+			await getActiveBans(); 
 			expect(mockMkdir).toHaveBeenCalledWith(expect.stringContaining('test-security'), {
 				recursive: true,
 			});
@@ -335,8 +335,8 @@ describe('ip-bans', () => {
 		it('does not recreate existing file', async () => {
 			mockAccess.mockResolvedValue(undefined);
 			await getActiveBans();
-			// writeFile for ensureFile not called when access succeeds
-			// (only called if access throws)
+			
+			
 		});
 	});
 });
