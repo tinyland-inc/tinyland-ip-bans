@@ -8,7 +8,7 @@ function getBanFilePath(): string {
   return path.join(cfg.securityDir, cfg.banFileName);
 }
 
-// Ensure security directory and file exist
+
 async function ensureFile(): Promise<void> {
   const cfg = getIpBansConfig();
   const filePath = getBanFilePath();
@@ -20,7 +20,7 @@ async function ensureFile(): Promise<void> {
   }
 }
 
-// Read IP bans
+
 async function readBans(): Promise<IpBan[]> {
   await ensureFile();
   const cfg = getIpBansConfig();
@@ -30,7 +30,7 @@ async function readBans(): Promise<IpBan[]> {
     const content = await fs.readFile(filePath, 'utf8');
     const parsed: unknown = JSON.parse(content);
 
-    // Validate that parsed result is an array
+    
     if (!Array.isArray(parsed)) {
       logger.warn('IP bans file contains invalid data (not an array), resetting to empty array');
       await fs.writeFile(filePath, '[]', 'utf8');
@@ -47,13 +47,13 @@ async function readBans(): Promise<IpBan[]> {
   }
 }
 
-// Write IP bans
+
 async function writeBans(bans: IpBan[]): Promise<void> {
   const filePath = getBanFilePath();
   await fs.writeFile(filePath, JSON.stringify(bans, null, 2), 'utf8');
 }
 
-// Check if an IP is banned
+
 export async function isIpBanned(ipAddress: string): Promise<boolean> {
   const cfg = getIpBansConfig();
   const logger = cfg.getLogger();
@@ -64,17 +64,17 @@ export async function isIpBanned(ipAddress: string): Promise<boolean> {
     return bans.some((ban) => {
       if (!ban.is_active) return false;
 
-      // Check if ban has expired
+      
       if (ban.expires_at && new Date(ban.expires_at) < now) {
         return false;
       }
 
-      // Check exact IP match
+      
       if (ban.ip_address === ipAddress) {
         return true;
       }
 
-      // Check IP range (simplified - in production you'd want proper IP range checking)
+      
       if (ban.ip_range_start && ban.ip_range_end) {
         return ipAddress >= ban.ip_range_start && ipAddress <= ban.ip_range_end;
       }
@@ -89,7 +89,7 @@ export async function isIpBanned(ipAddress: string): Promise<boolean> {
   }
 }
 
-// Add a new IP ban
+
 export async function addIpBan(
   ipAddress: string,
   options?: AddIpBanOptions
@@ -113,14 +113,14 @@ export async function addIpBan(
   await writeBans(bans);
 }
 
-// Remove an IP ban
+
 export async function removeIpBan(ipAddress: string): Promise<void> {
   const bans = await readBans();
   const filteredBans = bans.filter((ban) => ban.ip_address !== ipAddress);
   await writeBans(filteredBans);
 }
 
-// Deactivate an IP ban
+
 export async function deactivateIpBan(ipAddress: string): Promise<void> {
   const bans = await readBans();
   const ban = bans.find((b) => b.ip_address === ipAddress);
@@ -130,7 +130,7 @@ export async function deactivateIpBan(ipAddress: string): Promise<void> {
   }
 }
 
-// Get all active bans
+
 export async function getActiveBans(): Promise<IpBan[]> {
   const bans = await readBans();
   const now = new Date();
@@ -142,7 +142,7 @@ export async function getActiveBans(): Promise<IpBan[]> {
   });
 }
 
-// Clean up expired bans
+
 export async function cleanupExpiredBans(): Promise<number> {
   const bans = await readBans();
   const now = new Date();

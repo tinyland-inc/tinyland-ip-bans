@@ -6,13 +6,13 @@ export interface IpBansLogger {
 }
 
 export interface IpBansConfig {
-  /** Base directory for security data. Defaults to `process.cwd() + '/content/security'`. */
+  
   securityDir?: string;
-  /** Ban file name within securityDir. Defaults to 'ip-bans.json'. */
+  
   banFileName?: string;
-  /** Logger instance. Defaults to noop. */
+  
   getLogger?: () => IpBansLogger;
-  /** UUID generator. Defaults to crypto.randomUUID(). */
+  
   generateId?: () => string;
 }
 
